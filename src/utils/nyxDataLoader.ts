@@ -19,6 +19,22 @@ export interface HistogramData {
   logBinEdges: number[];
 }
 
+export interface PhaseOccupancyData {
+  voidRatio: number;
+  transitionRatio: number;
+  clusterRatio: number;
+  lowTailRatio: number;
+  highTailRatio: number;
+}
+
+export interface TimestepRelationMetrics {
+  timestep: number;
+  statistics: ReturnType<typeof calculateStatistics>;
+  histogram: HistogramData;
+  phaseOccupancy: PhaseOccupancyData;
+  entropy: number;
+}
+
 /**
  * 加载Nyx数据文件
  * @param url 数据文件URL
@@ -165,6 +181,74 @@ export function calculateStatistics(data: Float32Array) {
     p5,
     p95,
     p99,
+  };
+}
+
+export function calculatePhaseOccupancy(
+  data: Float32Array,
+  statistics: ReturnType<typeof calculateStatistics>
+): PhaseOccupancyData {
+  let voidCount = 0;
+  let clusterCount = 0;
+  let lowTailCount = 0;
+  let highTailCount = 0;
+
+  for (let i = 0; i < data.length; i++) {
+    const value = data[i];
+    if (value <= statistics.p5) voidCount++;
+    if (value >= statistics.p95) clusterCount++;
+    if (value <= statistics.p1) lowTailCount++;
+    if (value >= statistics.p99) highTailCount++;
+  }
+
+  const total = data.length || 1;
+  const voidRatio = voidCount / total;
+  const clusterRatio = clusterCount / total;
+  const transitionRatio = Math.max(0, 1 - voidRatio - clusterRatio);
+
+  return {
+    voidRatio,
+    transitionRatio,
+    clusterRatio,
+    lowTailRatio: lowTailCount / total,
+    highTailRatio: highTailCount / total,
+  };
+}
+
+export function calculateHistogramEntropy(histogram: HistogramData): number {
+  const total = histogram.logBins.reduce((sum, count) => sum + count, 0);
+  if (total === 0) return 0;
+
+  let entropy = 0;
+  for (const count of histogram.logBins) {
+    if (count <= 0) continue;
+    const probability = count / total;
+    entropy -= probability * Math.log2(probability);
+  }
+
+  const normalizedEntropy = histogram.logBins.length > 1
+    ? entropy / Math.log2(histogram.logBins.length)
+    : 0;
+
+  return normalizedEntropy;
+}
+
+export function calculateTimestepRelationMetrics(
+  data: Float32Array,
+  timestep: number,
+  numBins: number = 80
+): TimestepRelationMetrics {
+  const statistics = calculateStatistics(data);
+  const histogram = calculateLogHistogram(data, numBins);
+  const phaseOccupancy = calculatePhaseOccupancy(data, statistics);
+  const entropy = calculateHistogramEntropy(histogram);
+
+  return {
+    timestep,
+    statistics,
+    histogram,
+    phaseOccupancy,
+    entropy,
   };
 }
 

@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 export interface TFControlPoint {
   position: number;
@@ -49,29 +49,15 @@ class VolumeStore {
   };
 
   togglePlay = () => {
-    this.isPlaying = !this.isPlaying;
-    if (this.isPlaying) {
-      const interval = 1000 / this.playSpeed;
-      this._playTimer = setInterval(() => {
-        runInAction(() => this.advanceStep(1));
-      }, interval);
-    } else {
-      if (this._playTimer) {
-        clearInterval(this._playTimer);
-        this._playTimer = null;
-      }
+    this.isPlaying = false;
+    if (this._playTimer) {
+      clearInterval(this._playTimer);
+      this._playTimer = null;
     }
   };
 
   setPlaySpeed = (speed: number) => {
     this.playSpeed = speed;
-    if (this.isPlaying) {
-      if (this._playTimer) clearInterval(this._playTimer);
-      const interval = 1000 / speed;
-      this._playTimer = setInterval(() => {
-        runInAction(() => this.advanceStep(1));
-      }, interval);
-    }
   };
 
   setStepSize = (size: number) => {

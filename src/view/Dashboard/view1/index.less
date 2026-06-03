@@ -3,4 +3,25 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+    min-height: 0;
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+
+    .view1-overview {
+        flex: 0 0 360px;
+        min-height: 0;
+        overflow: hidden;
+
+        .time-evolution-overview {
+            height: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+    .view1-renderer {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
 }

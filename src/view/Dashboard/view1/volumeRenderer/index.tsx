@@ -4,7 +4,6 @@ import { VolumeScene } from './volumeScene';
 import { volumeStore } from '@/store/volumeStore';
 import { loadTimeStep } from './loadData';
 import TimeControls from './TimeControls';
-import StepPreviewRail from './StepPreviewRail';
 import TransferFunctionEditor from './TransferFunctionEditor';
 import './index.less';
 
@@ -91,7 +90,6 @@ const VolumeRenderer: React.FC = observer(() => {
 
   return (
     <div className="volume-renderer-root" ref={containerRef}>
-      <StepPreviewRail />
       <TimeControls />
       <TransferFunctionEditor />
       {volumeStore.isLoading && (

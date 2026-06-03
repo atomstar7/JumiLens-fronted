@@ -1,0 +1,189 @@
+.time-evolution-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+
+  .overview-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .overview-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  .overview-subtitle {
+    margin-top: 4px;
+    font-size: 11px;
+    color: #8c8c8c;
+  }
+
+  .overview-progress {
+    font-size: 12px;
+    color: #1890ff;
+    background: #e6f4ff;
+    border: 1px solid #91caff;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .overview-summary {
+    font-size: 12px;
+    color: #444;
+    line-height: 1.5;
+    padding: 8px 10px;
+    background: #fafafa;
+    border-radius: 6px;
+    border: 1px solid #f0f0f0;
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    min-height: 0;
+  }
+
+  .overview-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #fcfcfc;
+    border: 1px solid #f0f0f0;
+    min-width: 0;
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      color: #1a1a1a;
+      font-weight: 600;
+
+      span:last-child {
+        font-weight: 400;
+        color: #8c8c8c;
+      }
+    }
+  }
+
+  .overview-background {
+    fill: #ffffff;
+  }
+
+  .overview-heatmap,
+  .overview-lines,
+  .overview-phases,
+  .overview-entropy {
+    width: 100%;
+    display: block;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .overview-heatmap {
+    height: 220px;
+    cursor: pointer;
+  }
+
+  .overview-lines {
+    height: 180px;
+  }
+
+  .overview-phases {
+    height: 110px;
+  }
+
+  .overview-entropy {
+    height: 120px;
+  }
+
+  .overview-cursor {
+    stroke: rgba(24, 144, 255, 0.9);
+    stroke-width: 1.5;
+    stroke-dasharray: 5 4;
+  }
+
+  .overview-grid-lines line {
+    stroke: #f0f0f0;
+    stroke-width: 1;
+  }
+
+  .line {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .mean-line {
+    stroke: #1677ff;
+  }
+
+  .std-line {
+    stroke: #722ed1;
+  }
+
+  .p99-line {
+    stroke: #ff7a45;
+  }
+
+  .max-line {
+    stroke: #f5222d;
+  }
+
+  .entropy-line {
+    stroke: #13c2c2;
+  }
+
+  .overview-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 11px;
+  }
+
+  .legend-item {
+    padding: 2px 8px;
+    border-radius: 999px;
+    color: #fff;
+
+    &.mean { background: #1677ff; }
+    &.std { background: #722ed1; }
+    &.p99 { background: #ff7a45; }
+    &.max { background: #f5222d; }
+  }
+
+  .overview-axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #8c8c8c;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .phase-void {
+    fill: rgba(24, 144, 255, 0.35);
+  }
+
+  .phase-transition {
+    fill: rgba(250, 173, 20, 0.28);
+  }
+
+  .phase-cluster {
+    fill: rgba(245, 34, 45, 0.42);
+  }
+}

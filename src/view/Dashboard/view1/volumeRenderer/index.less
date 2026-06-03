@@ -26,40 +26,21 @@
 
 .time-controls {
   position: absolute;
-  bottom: 16px;
   left: 50%;
+  bottom: 16px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(6px);
-  padding: 10px 20px;
-  border-radius: 8px;
   z-index: 50;
-
-  .play-btn {
-    cursor: pointer;
-    background: none;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #fff;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    transition: background 0.15s;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-  }
 
   .time-slider {
     -webkit-appearance: none;
-    width: 280px;
+    width: 320px;
     height: 4px;
     border-radius: 2px;
     background: rgba(255, 255, 255, 0.25);
@@ -76,230 +57,9 @@
     }
   }
 
-  .speed-select {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    padding: 3px 6px;
-    font-size: 12px;
-    cursor: pointer;
-    outline: none;
-
-    option {
-      background: #222;
-      color: #fff;
-    }
-  }
-
   .step-label {
     color: rgba(255, 255, 255, 0.85);
     font-size: 13px;
-    font-variant-numeric: tabular-nums;
-    min-width: 80px;
-    text-align: center;
-  }
-}
-
-.step-preview-rail {
-  position: absolute;
-  left: 50%;
-  bottom: 76px;
-  transform: translateX(-50%);
-  width: min(92vw, 1160px);
-  padding: 12px 14px 14px;
-  border-radius: 14px;
-  background: rgba(10, 12, 18, 0.72);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
-  z-index: 48;
-
-  .step-preview-rail-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 10px;
-  }
-
-  .step-preview-rail-title {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .step-preview-rail-name {
-    color: rgba(255, 255, 255, 0.94);
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-  }
-
-  .step-preview-rail-hint {
-    color: rgba(255, 255, 255, 0.58);
-    font-size: 11px;
-    line-height: 1.4;
-  }
-
-  .step-preview-rail-counter {
-    color: rgba(255, 255, 255, 0.68);
-    font-size: 11px;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    padding-top: 2px;
-  }
-
-  .step-preview-rail-scroller {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    scrollbar-width: thin;
-  }
-
-  .preview-step-card {
-    flex: 0 0 168px;
-    min-height: 122px;
-    padding: 10px 10px 9px;
-    border-radius: 12px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    cursor: pointer;
-    transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    color: #fff;
-
-    &:hover {
-      transform: translateY(-2px);
-      border-color: rgba(126, 211, 255, 0.38);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
-      background: linear-gradient(180deg, rgba(126, 211, 255, 0.14), rgba(255, 255, 255, 0.05));
-    }
-
-    &:focus-visible {
-      outline: 2px solid rgba(121, 194, 255, 0.9);
-      outline-offset: 2px;
-    }
-
-    &.is-current {
-      border-color: rgba(120, 220, 150, 0.72);
-      box-shadow: 0 0 0 1px rgba(120, 220, 150, 0.16) inset;
-    }
-
-    &.is-bookmarked {
-      border-color: rgba(255, 208, 92, 0.55);
-    }
-  }
-
-  .preview-card-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 8px;
-  }
-
-  .preview-step-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-items: center;
-  }
-
-  .preview-step-chip,
-  .preview-step-tag {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 20px;
-    padding: 0 7px;
-    border-radius: 999px;
-    font-size: 10px;
-    letter-spacing: 0.2px;
-    font-variant-numeric: tabular-nums;
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.88);
-  }
-
-  .preview-step-tag.current {
-    background: rgba(84, 209, 146, 0.18);
-    color: #8ff2b8;
-  }
-
-  .preview-step-tag.bookmarked {
-    background: rgba(255, 196, 61, 0.16);
-    color: #ffd86b;
-  }
-
-  .preview-bookmark-btn {
-    border: none;
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.72);
-    border-radius: 8px;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.14);
-    }
-
-    &.is-on {
-      color: #ffd86b;
-      background: rgba(255, 196, 61, 0.14);
-    }
-  }
-
-  .preview-sparkline {
-    height: 42px;
-    display: flex;
-    align-items: flex-end;
-    gap: 3px;
-    padding: 5px 2px 0;
-    border-radius: 9px;
-    background: rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-  }
-
-  .preview-spark-bar {
-    flex: 1 1 0;
-    min-width: 4px;
-    border-radius: 999px 999px 0 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(104, 198, 255, 0.86));
-    box-shadow: 0 0 10px rgba(99, 189, 255, 0.18);
-  }
-
-  .preview-loading {
-    color: rgba(255, 255, 255, 0.54);
-    font-size: 11px;
-    padding: 10px 0;
-  }
-
-  .preview-card-footer {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
-
-  .preview-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .preview-stat-label {
-    color: rgba(255, 255, 255, 0.45);
-    font-size: 10px;
-  }
-
-  .preview-stat-value {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 10px;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }

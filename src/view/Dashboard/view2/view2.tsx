@@ -30,7 +30,7 @@ const View2: React.FC = observer(() => {
       const url = `/assets/Nyx/${filename}`;
       const data = await loadNyxData(url, timestep, DATA_DIMENSIONS);
 
-      const histogram = calculateLogHistogram(data.data, 80, Math.log10(data.min), Math.log10(data.max));
+      const histogram = calculateLogHistogram(data.data, 80);
       setHistogramData(histogram);
 
       const stats = calculateStatistics(data.data);
