@@ -4,6 +4,7 @@ import { VolumeScene } from './volumeScene';
 import { volumeStore } from '@/store/volumeStore';
 import { loadTimeStep } from './loadData';
 import TimeControls from './TimeControls';
+import StepPreviewRail from './StepPreviewRail';
 import TransferFunctionEditor from './TransferFunctionEditor';
 import './index.less';
 
@@ -21,8 +22,8 @@ const VolumeRenderer: React.FC = observer(() => {
     if (cached) {
       vs.loadVolumeData(cached);
     } else {
-      loadTimeStep(0).then(({ normalized }) => {
-        volumeStore.cacheData(0, normalized, 0, 1);
+      loadTimeStep(0).then(({ normalized, min, max, mean, std }) => {
+        volumeStore.cacheData(0, normalized, min, max, mean, std);
         vs.loadVolumeData(normalized);
       });
     }
@@ -52,8 +53,8 @@ const VolumeRenderer: React.FC = observer(() => {
       vs.loadVolumeData(cached);
     } else {
       volumeStore.isLoading = true;
-      loadTimeStep(step).then(({ normalized }) => {
-        volumeStore.cacheData(step, normalized, 0, 1);
+      loadTimeStep(step).then(({ normalized, min, max, mean, std }) => {
+        volumeStore.cacheData(step, normalized, min, max, mean, std);
         volumeStore.isLoading = false;
         vs.loadVolumeData(normalized);
       });
@@ -64,12 +65,21 @@ const VolumeRenderer: React.FC = observer(() => {
         const preloadStep = step + offset;
         if (preloadStep < 0 || preloadStep > 99) continue;
         if (volumeStore.getCachedData(preloadStep)) continue;
-        loadTimeStep(preloadStep).then(({ normalized }) => {
-          volumeStore.cacheData(preloadStep, normalized, 0, 1);
+        loadTimeStep(preloadStep).then(({ normalized, min, max, mean, std }) => {
+          volumeStore.cacheData(preloadStep, normalized, min, max, mean, std);
         });
       }
     }
   }, [volumeStore.currentStep]);
+
+  useEffect(() => {
+    for (const bookmarkedStep of volumeStore.bookmarkedSteps) {
+      if (volumeStore.getCachedData(bookmarkedStep)) continue;
+      loadTimeStep(bookmarkedStep).then(({ normalized, min, max, mean, std }) => {
+        volumeStore.cacheData(bookmarkedStep, normalized, min, max, mean, std);
+      });
+    }
+  }, [volumeStore.bookmarkedSteps]);
 
   useEffect(() => {
     sceneRef.current?.buildTFTexture(volumeStore.transferFunction);
@@ -81,6 +91,7 @@ const VolumeRenderer: React.FC = observer(() => {
 
   return (
     <div className="volume-renderer-root" ref={containerRef}>
+      <StepPreviewRail />
       <TimeControls />
       <TransferFunctionEditor />
       {volumeStore.isLoading && (

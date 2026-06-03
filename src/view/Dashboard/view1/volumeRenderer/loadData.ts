@@ -2,6 +2,8 @@ export interface LoadedData {
   normalized: Float32Array;
   min: number;
   max: number;
+  mean: number;
+  std: number;
 }
 
 export async function loadTimeStep(step: number): Promise<LoadedData> {
@@ -17,10 +19,19 @@ export async function loadTimeStep(step: number): Promise<LoadedData> {
 
   let min = Infinity;
   let max = -Infinity;
+  let sum = 0;
+  let sumSq = 0;
   for (let i = 0; i < raw.length; i++) {
-    if (raw[i] < min) min = raw[i];
-    if (raw[i] > max) max = raw[i];
+    const value = raw[i];
+    if (value < min) min = value;
+    if (value > max) max = value;
+    sum += value;
+    sumSq += value * value;
   }
+
+  const mean = sum / raw.length;
+  const variance = sumSq / raw.length - mean * mean;
+  const std = Math.sqrt(Math.max(variance, 0));
 
   const N = 128;
   const N2 = N * N;
@@ -37,5 +48,5 @@ export async function loadTimeStep(step: number): Promise<LoadedData> {
     }
   }
 
-  return { normalized, min, max };
+  return { normalized, min, max, mean, std };
 }
