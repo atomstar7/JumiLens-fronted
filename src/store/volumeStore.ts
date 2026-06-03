@@ -13,7 +13,6 @@ class VolumeStore {
   isLoading = false;
   stepSize = 1 / 64;
   densityScale = 1.0;
-  bookmarkedSteps: number[] = [];
 
   transferFunction: TFControlPoint[] = [
     { position: 0.0, color: [0.1, 0.0, 0.2], opacity: 0.0 },
@@ -29,8 +28,6 @@ class VolumeStore {
   private _dataCache = new Map<number, Float32Array>();
   private _dataMin = new Map<number, number>();
   private _dataMax = new Map<number, number>();
-  private _dataMean = new Map<number, number>();
-  private _dataStd = new Map<number, number>();
   private _playTimer: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
@@ -68,22 +65,6 @@ class VolumeStore {
     this.densityScale = scale;
   };
 
-  toggleBookmarkedStep = (step: number) => {
-    const normalizedStep = Math.max(0, Math.min(99, Math.round(step)));
-    const index = this.bookmarkedSteps.indexOf(normalizedStep);
-
-    if (index >= 0) {
-      this.bookmarkedSteps = this.bookmarkedSteps.filter(item => item !== normalizedStep);
-      return;
-    }
-
-    this.bookmarkedSteps = [...this.bookmarkedSteps, normalizedStep].sort((a, b) => a - b);
-  };
-
-  isBookmarkedStep = (step: number) => {
-    return this.bookmarkedSteps.includes(step);
-  };
-
   setTransferFunction = (points: TFControlPoint[]) => {
     this.transferFunction = [...points].sort((a, b) => a.position - b.position);
   };
@@ -99,23 +80,10 @@ class VolumeStore {
     return { min, max };
   };
 
-  getDataSummary = (step: number): { min: number; max: number; mean?: number; std?: number } | undefined => {
-    const range = this.getDataRange(step);
-    if (!range) return undefined;
-
-    return {
-      ...range,
-      mean: this._dataMean.get(step),
-      std: this._dataStd.get(step),
-    };
-  };
-
-  cacheData = (step: number, data: Float32Array, min: number, max: number, mean?: number, std?: number) => {
+  cacheData = (step: number, data: Float32Array, min: number, max: number) => {
     this._dataCache.set(step, data);
     this._dataMin.set(step, min);
     this._dataMax.set(step, max);
-    if (mean !== undefined) this._dataMean.set(step, mean);
-    if (std !== undefined) this._dataStd.set(step, std);
 
     const MAX_CACHE = 20;
     if (this._dataCache.size > MAX_CACHE) {
@@ -133,8 +101,6 @@ class VolumeStore {
         this._dataCache.delete(farthest);
         this._dataMin.delete(farthest);
         this._dataMax.delete(farthest);
-        this._dataMean.delete(farthest);
-        this._dataStd.delete(farthest);
       }
     }
   };
